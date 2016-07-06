@@ -28,3 +28,15 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Excluded binary files #!UBB!#
+*.wav
+*.wav.meta
+*.ogg
+*.ogg.meta
+*.mp3
+*.mp3.meta
+*.tga
+*.tga.meta
+*.psd
+*.psd.meta
