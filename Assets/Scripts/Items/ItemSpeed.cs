@@ -14,9 +14,11 @@ public class ItemSpeed : MonoBehaviour{
 
     }
 
-    void OnTriggerEnter2D()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().Speed += 100;
-        Destroy(this.gameObject);
+        if (other.tag == "Player") {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().Speed += 100;
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -15,15 +15,21 @@ public class Movement : MonoBehaviour {
     public LayerMask IsGround;
     private Component boxCollider;
     private float StandarSpeed;
+    private Rigidbody2D rb;
     /*quitar la variable crounched en el caso de que se pueda mover mientras esta agachado
     private bool crounched = false;
     */
 
     public float jump=700;
 
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+    }
+
 	// Use this for initialization
 	void Start () {
-         boxCollider = GetComponent<BoxCollider2D>();
         StandarSpeed = Speed;
     }
 	
@@ -44,7 +50,7 @@ public class Movement : MonoBehaviour {
         {
             uncrouch();
         }
-        GetComponent<Rigidbody2D>().velocity = new Vector2(move * Speed, GetComponent<Rigidbody2D>().velocity.y);
+        rb.velocity = new Vector2(move * Speed, rb.velocity.y);
 
         //indica si tiene que cambiar la direccion a la que mira el personaje
         if (move > 0 && !facingRight)
@@ -112,7 +118,7 @@ public class Movement : MonoBehaviour {
         if((grounded0 || grounded1 || grounded2) && Input.GetKeyDown("space"))
         {
             //anim.setBool("Ground", false);
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jump));
+            rb.AddForce(new Vector2(0, jump));
         }
     }
 

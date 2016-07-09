@@ -3,7 +3,12 @@ using System.Collections;
 
 public class ArmMovement : MonoBehaviour {
 
-	
+    private Movement mv;
+
+    void Awake()
+    {
+        mv = GameObject.Find("Personaje").GetComponent<Movement>();
+    }
 
 	// Update is called once per frame
 	void Update () {
@@ -18,7 +23,7 @@ public class ArmMovement : MonoBehaviour {
                 transform.rotation = Quaternion.Euler(0f, 0f, 90f);
             //}
         }
-        else if(!GameObject.Find("Personaje").GetComponent<Movement>().grounded0 && (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)))
+        else if(!mv.grounded0 && (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)))
         {
             transform.rotation = Quaternion.Euler(0f, 0f, -90f);
         }else

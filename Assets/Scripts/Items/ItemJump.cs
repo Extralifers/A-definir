@@ -13,9 +13,12 @@ public class ItemJump : MonoBehaviour {
 	
 	}
 
-    void OnTriggerEnter2D()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().jump += 1000;
-        Destroy(this.gameObject);
+        if (other.tag == "Player")
+        {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().jump += 1000;
+            Destroy(this.gameObject);
+        }
     }
 }

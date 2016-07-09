@@ -13,9 +13,12 @@ public class ItemFireRate : MonoBehaviour {
 	
 	}
 
-    void OnTriggerEnter2D()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject.FindGameObjectWithTag("Weapon").GetComponent<Weapon>().FireRate += 20;
-        Destroy(this.gameObject);
+        if (other.tag == "Player")
+        {
+            GameObject.FindGameObjectWithTag("Weapon").GetComponent<Weapon>().FireRate += 20;
+            Destroy(this.gameObject);
+        }
     }
 }

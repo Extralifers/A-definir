@@ -17,9 +17,12 @@ public class Weapon : MonoBehaviour
     public Transform bulletPrefab;
     private GameObject player;
 
+    private Movement mv;
+
     // Use this for initialization
     void Awake()
     {
+        mv = GameObject.Find("Personaje").GetComponent<Movement>();
         FirePoint = transform.FindChild("FirePoint");
         if (FirePoint == null)
         {
@@ -52,7 +55,7 @@ public class Weapon : MonoBehaviour
         int grades = 0 ;
         Vector2 FirePointPosition = new Vector2(FirePoint.position.x, FirePoint.position.y);
         RaycastHit2D hit = Physics2D.Raycast(FirePointPosition, new Vector2(1, 0), Range, CanHit);
-        if (!GameObject.Find("Personaje").GetComponent<Movement>().grounded0 && (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))) //caso de salto con disparo hacia abajo
+        if (!mv.grounded0 && (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))) //caso de salto con disparo hacia abajo
         {
             hit = Physics2D.Raycast(FirePointPosition, new Vector2(0, -1), Range, CanHit);
             Debug.DrawLine(FirePointPosition, new Vector2(-1, 0) * 100);
@@ -91,7 +94,7 @@ public class Weapon : MonoBehaviour
         }
         else //disparar sin moverse
         {
-            bool face = GameObject.Find("Personaje").GetComponent<Movement>().facingRight;
+            bool face = mv.facingRight;
             if (face)
             {
                 hit = Physics2D.Raycast(FirePointPosition, new Vector2(1, 0), Range, CanHit);
