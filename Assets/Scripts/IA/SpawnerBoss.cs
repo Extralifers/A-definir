@@ -28,6 +28,18 @@ public class SpawnerBoss : MonoBehaviour {
     public int hp;
     public int hpMax;
     public int hpState;
+    public int sec100;
+    public int sec80;
+    public int sec60;
+    public int sec40;
+    public int sec20;
+    private int secActual;
+    private bool once80;
+    private bool once60;
+    private bool once40;
+    private bool once20;
+
+    public float radioExplosion;
 
     void Awake()
     {
@@ -43,97 +55,101 @@ public class SpawnerBoss : MonoBehaviour {
         hp = 100;
         hpMax = hp;
         hpState = 1;
+        sec100 = 7;
+        sec80 = 6;
+        sec60 = 5;
+        sec40 = 4;
+        sec20 = 3;
+        secActual = sec100;
+        once80 = false;
+        once60 = false;
+        once40 = false;
+        once20 = false;
+        radioExplosion = 5.0f;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (hp <= hpMax / 5)
+        if ((hp <= ((hpMax / 5) * 4)) && !once80)
         {
-            hpState = 5;
+            secActual = sec80;
+            once80 = true;
+            state = "Exploid";
         }
-        else if(hp <= (hpMax / 5) * 2)
+        else if ((hp <= ((hpMax / 5) * 3)) && !once60)
         {
-            hpState = 4;
+            secActual = sec60;
+            once60 = true;
+            state = "Exploid"; 
         }
-        else if (hp <= (hpMax / 5) * 3)
+        else if ((hp <= ((hpMax / 5) * 2)) && !once40)
         {
-            hpState = 3;
+            secActual = sec40;
+            once40 = true;
+            state = "Exploid";
         }
-        else if (hp <= (hpMax / 5) * 4)
+        else if ((hp <= (hpMax / 5)) && !once20)
         {
-            hpState = 2;
+            secActual = sec20;
+            once20 = true;
+            state = "Exploid";
         }
+        switch (state)
+        {
+            case "Charging":
+                if (cd)
+                {
+                    if (!initial)
+                    {
+                        if (posActual == pos1)
+                        {
+                            transform.Translate(pos2.transform.position - transform.position);
+                            posActual = pos2;
+                        }
+                        else if (posActual == pos2)
+                        {
+                            transform.Translate(pos3.transform.position - transform.position);
+                            posActual = pos3;
+                        }
+                        else if (posActual == pos3)
+                        {
+                            transform.Translate(pos1.transform.position - transform.position);
+                            posActual = pos1;
+                        }
+                    }
+                    else
+                    {
+                        initial = false;
+                    }
 
-        if (state == "Charging")
-        {
-            if (cd)
-            {
-                if (!initial)
-                {
-                    if (posActual == pos1)
+                    if (lluviaCounter == 3)
                     {
-                        transform.Translate(pos2.transform.position - transform.position);
-                        posActual = pos2;
+                        state = "SpawnAttack";
                     }
-                    else if (posActual == pos2)
+                    else
                     {
-                        transform.Translate(pos3.transform.position - transform.position);
-                        posActual = pos3;
+                        state = "RainAttack";
+                        lluviaCounter++;
                     }
-                    else if (posActual == pos3)
-                    {
-                        transform.Translate(pos1.transform.position - transform.position);
-                        posActual = pos1;
-                    }
-                }else
-                {
-                    initial = false;
+
                 }
-
-                if (lluviaCounter == 3)
+                break;
+            case "SpawnAttack":
+                Spawn();
+                break;
+            case "RainAttack":
+                Llueve();
+                break;
+            case "Exploid":
+                if (cd)
                 {
-                    state = "SpawnAttack";
-                }else
-                {
-                    state = "RainAttack";
-                    lluviaCounter++;
+                    Exploid();
                 }
-                
-            }
+                break;
         }
-        else if (state == "SpawnAttack")
-        {
-            Spawn();
-        }
-        else if (state == "RainAttack")
-        {
-            Llueve();
-        }
-
 	}
 
-    IEnumerator Charge() {
-        int sec = 10;
-        if (hpState == 1)
-        {
-            sec = 7;
-        }
-        else if (hpState == 2)
-        {
-            sec = 6;
-        }
-        else if (hpState == 3)
-        {
-            sec = 5;
-        }
-        else if (hpState == 4)
-        {
-            sec = 4;
-        }
-        else if (hpState == 5)
-        {
-            sec = 3;
-        }
+    IEnumerator Charge(int sec) {
         yield return new WaitForSeconds(sec);
         cd = true;
 
@@ -163,7 +179,7 @@ public class SpawnerBoss : MonoBehaviour {
             Instantiate(enemy, pos4.transform.position, enemy.transform.rotation);
         }
         Debug.Log("ataca spawn");
-        StartCoroutine(Charge());
+        StartCoroutine(Charge(secActual));
         cd = false;
         lluviaCounter = 0;
         state = "Charging";
@@ -176,7 +192,24 @@ public class SpawnerBoss : MonoBehaviour {
         {
             Instantiate(lluvia, inicioLluvia.transform.position+new Vector3(i,0,0), lluvia.transform.rotation);
         }
-        StartCoroutine(Charge());
+        StartCoroutine(Charge(secActual));
+        cd = false;
+        state = "Charging";
+    }
+
+    void Exploid()
+    {
+        Debug.Log("Explosion");
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position,radioExplosion);
+        for (int i = 0; i < hitColliders.Length; i++)
+        {
+            if(hitColliders[i].tag == "Player")
+            {
+                //hacer daño al jugador
+                //se puede añadir el efecto de repulsion por explosion pero primero consultar con equipo y tener otras cosas terminadas
+            }
+        }
+        StartCoroutine(Charge(secActual));
         cd = false;
         state = "Charging";
     }
