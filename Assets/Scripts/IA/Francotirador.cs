@@ -12,9 +12,13 @@ public class Francotirador : MonoBehaviour {
 
     public GameObject bulletPrefab;
 
-    void awake()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.Log("Player not found");
+        }
     }
 
 	// Use this for initialization
@@ -26,8 +30,11 @@ public class Francotirador : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, player.transform.position-transform.position, range);
-        Debug.DrawLine(transform.position, player.transform.position);
+        Vector2 enemyPos = new Vector2(transform.position.x,transform.position.y);
+        Vector2 playerPos = new Vector2(player.transform.position.x, player.transform.position.y);
+        //Vector2 playerPos = new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x, GameObject.FindGameObjectWithTag("Player").transform.position.y);
+        RaycastHit2D hit = Physics2D.Raycast(enemyPos, playerPos-enemyPos, range);
+        Debug.DrawLine(enemyPos, playerPos);
         if(Time.time >= timeToShoot)
         {
             timeToShoot += 1 + Time.time / fireRate;
@@ -37,6 +44,10 @@ public class Francotirador : MonoBehaviour {
 
     void fire()
     {
-        Instantiate(bulletPrefab, transform.position,transform.rotation * Quaternion.Inverse(player.transform.rotation));
+        Vector3 dif = player.transform.position - transform.position;
+        dif.Normalize();
+        float rotZ = Mathf.Atan2(dif.y, dif.x) * Mathf.Rad2Deg;
+        Quaternion rot = Quaternion.Euler(0f, 0f, rotZ); 
+        Instantiate(bulletPrefab, transform.position, rot);
     }
 }
