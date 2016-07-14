@@ -18,6 +18,7 @@ public class Francotirador : MonoBehaviour {
         if (player == null)
         {
             Debug.Log("Player not found");
+            
         }
     }
 
@@ -32,7 +33,7 @@ public class Francotirador : MonoBehaviour {
 	void Update () {
         Vector2 enemyPos = new Vector2(transform.position.x,transform.position.y);
         Vector2 playerPos = new Vector2(player.transform.position.x, player.transform.position.y);
-        //Vector2 playerPos = new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x, GameObject.FindGameObjectWithTag("Player").transform.position.y);
+       
         RaycastHit2D hit = Physics2D.Raycast(enemyPos, playerPos-enemyPos, range);
         Debug.DrawLine(enemyPos, playerPos);
         if(Time.time >= timeToShoot)

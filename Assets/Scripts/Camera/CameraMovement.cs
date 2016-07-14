@@ -7,6 +7,7 @@ public class CameraMovement : MonoBehaviour {
     private Transform gameCamera;
     private Transform user;
     private float delayToFind = 0;
+    public float cameraOffset;
 
     void Start()
     {
@@ -24,7 +25,7 @@ public class CameraMovement : MonoBehaviour {
         }
 
         //this.transform.position = player.transform.position;
-        gameCamera.position = new Vector3(user.position.x, user.position.y, -10);
+        gameCamera.position = new Vector3(user.position.x, user.position.y, cameraOffset);
 
 	}
 

@@ -22,7 +22,7 @@ public class SpawnerBoss : MonoBehaviour {
 
     public bool cd;
     public bool initial;
-
+   
     public string state;
 
     public int hp;

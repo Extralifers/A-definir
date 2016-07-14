@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     private float TimeToFire = 0; //tiempo de carga entre disparos
     Transform FirePoint; //desde donde dispara el arma
 
-    public Transform bulletPrefab;
+    public GameObject bulletPrefab;
     private GameObject player;
 
     private Movement mv;
