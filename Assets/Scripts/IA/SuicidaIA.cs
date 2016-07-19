@@ -8,10 +8,12 @@ public class SuicidaIA : BasicIA {
     protected Vector3 distance;
     // Use this for initialization
     void Start () {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        enemy = this.transform;
+
         Speed = 2f;
         impulsado = false;
+        distance = new Vector3();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        enemy = this.transform;
     }
     void FixedUpdate()
     {

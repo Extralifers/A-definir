@@ -19,6 +19,8 @@ public class BulletMovement : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log(gameObject.transform.parent.gameObject.ToString());
+        Debug.Log(collision.gameObject.ToString());
         DamageEngine.GetComponent<DamageEngine>().ObjectCollision(gameObject.transform.parent.gameObject, collision.gameObject);
         Destroy(this.gameObject);
     }

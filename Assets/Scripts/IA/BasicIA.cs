@@ -23,6 +23,7 @@ public class BasicIA : MonoBehaviour {
         maxHealth = 10;
         currentHealth = 10;
         damage = 2;
+
     }
 	void FixedUpdate () {
 
