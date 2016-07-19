@@ -22,8 +22,7 @@ public class Weapon : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        player = GameObject.Find("Personaje");
-        mv = player.GetComponent<Movement>();
+        mv = GameObject.Find("Personaje").GetComponent<Movement>();
         FirePoint = transform.FindChild("FirePoint");
         if (FirePoint == null)
         {
@@ -122,8 +121,6 @@ public class Weapon : MonoBehaviour
 
     void FireEffect(int rot)
     {
-        GameObject bala=  Instantiate(bulletPrefab,FirePoint.position, Quaternion.Euler(new Vector3(0,0,rot))) as GameObject;
-        bala.transform.parent=player.transform;
-
+        Instantiate(bulletPrefab,FirePoint.position, Quaternion.Euler(new Vector3(0,0,rot)));
     }
 }
