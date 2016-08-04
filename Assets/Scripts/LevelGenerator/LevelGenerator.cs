@@ -14,29 +14,34 @@ using System.IO;
 
 public class LevelGenerator : MonoBehaviour {
 	
-	public static List<string> nameRooms = new List<string>();
-	public static List<int> inCodes = new List<int>();
-	public static List<int> outCodes = new List<int>();
+	//public static List<string> nameRooms = new List<string>();
+	//public static List<int> inCodes = new List<int>();
+	//public static List<int> outCodes = new List<int>();
 	public static List<GameObject> rooms = new List<GameObject>();
 
-	private int currentSize = 0;
-	private int maxSize = 10;
-	
+	public int maxSize = 10;
 	// Use this for initialization
 	void Start () {
-		buildRoomMap ();
-		
-		int inCode = 0;
-		float nextPos = 0f;
+		//buildRoomMap ();
+		//rooms = Room.GetAllRooms ();
+
+		Room currentRoom = Room.GetRdm(Room.GetInitRooms());
+
+		float nextPos = 45.85f;
+		rooms.Add((GameObject) Instantiate(Resources.Load(currentRoom.FileName), new Vector3(nextPos, 0), new Quaternion(0, 0, 0, 0))); 
+		int currentSize = 1;
+
 		while ( currentSize < maxSize)
 		{
 			List<int> rList = new List<int> ();
-			if(currentSize == maxSize - 1)  rList = getLastInRoom (inCode);
-			else rList = getMedInRoom (inCode);
-			int index = rList[(int)Random.Range (0, rList.Count)];
-			inCode = outCodes[index];
-			
-			rooms.Add((GameObject) Instantiate(Resources.Load(nameRooms[index]), new Vector3(nextPos, 0), new Quaternion(0, 0, 0, 0))); 
+			if (currentSize == maxSize - 1)
+				currentRoom = Room.GetRdm (currentRoom.GetPossibleClosedRooms ());
+			else 
+				currentRoom = Room.GetRdm (currentRoom.GetPossibleOpenRooms ());
+
+
+			rooms.Add((GameObject) Instantiate(Resources.Load(currentRoom.FileName), new Vector3(nextPos, 0), new Quaternion(0, 0, 0, 0))); 
+
 
 			nextPos += 45.85f; //47f
 			currentSize++;
@@ -48,8 +53,11 @@ public class LevelGenerator : MonoBehaviour {
 	void Update () {
 		
 	}
-	
-	public static List<int> getMedInRoom(int inCode)
+
+	/*
+	 * Devuelve una habitación con salida
+	 */
+	/*public static List<int> getMedInRoom(int inCode)
 	{
 		List<int> roomList = new List<int> ();
 		for(int i=0;i<nameRooms.Count;i++){
@@ -57,9 +65,12 @@ public class LevelGenerator : MonoBehaviour {
 				roomList.Add(i);
 		}
 		return roomList;
-	}
-	
-	public static List<int> getLastInRoom(int inCode)
+	}*/
+
+	/*
+	 * Devuelve una habitación sin salida en función de una entrada
+	 */
+	/*public static List<int> getLastInRoom(int inCode)
 	{
 
 		List<int> roomList = new List<int> ();
@@ -68,9 +79,12 @@ public class LevelGenerator : MonoBehaviour {
 				roomList.Add(i);
 		}
 		return roomList;
-	}
-	
-	public static void buildRoomMap()
+	}*/
+
+	/*
+		Recoge todas los prefabs de rooms y los mete en la lista de nombres, entradas y salidas nameRooms, inCodes, outCodes
+	*/
+	/*public static void buildRoomMap()
 	{
 		string path = Application.dataPath + @"/Resources/rooms";
 		var info = new DirectoryInfo(path);
@@ -84,6 +98,6 @@ public class LevelGenerator : MonoBehaviour {
 			inCodes.Add(int.Parse(data[1]));
 			outCodes.Add (int.Parse(data[2]));
 		}
-	}
+	}*/
 }
 
