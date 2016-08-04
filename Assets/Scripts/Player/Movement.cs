@@ -20,7 +20,7 @@ public class Movement : MonoBehaviour {
     private bool crounched = false;
     */
 
-    public float jump=700;
+    public float jump;
 
     void Awake()
     {
