@@ -4,11 +4,13 @@ using System.Collections;
 public class BulletMovement : MonoBehaviour {
 
     public int Speed;
-    private GameObject DamageEngine;
+    private GameObject damageEngine;
 
     void Awake() {
 
-        DamageEngine = GameObject.Find("DamageEngine");
+		damageEngine = GameObject.FindGameObjectWithTag("GameController");
+		if (damageEngine == null)
+			Debug.LogError ("GameController not found!");
     }
 
 	// Update is called once per frame
@@ -19,9 +21,7 @@ public class BulletMovement : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(gameObject.transform.parent.gameObject.ToString());
-        Debug.Log(collision.gameObject.ToString());
-        DamageEngine.GetComponent<DamageEngine>().ObjectCollision(gameObject.transform.parent.gameObject, collision.gameObject);
+		damageEngine.GetComponent<DamageEngine>().ObjectCollision(gameObject.transform.parent.gameObject, collision.gameObject);
         Destroy(this.gameObject);
     }
 }

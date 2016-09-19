@@ -13,9 +13,10 @@ public class Movement : MonoBehaviour {
     public Transform[] groundCheck;
     float GroundRadious = 0.2f;
     public LayerMask IsGround;
-    private Component boxCollider;
+	private BoxCollider2D playerCollider;
     private float StandarSpeed;
     private Rigidbody2D rb;
+	private float normalYColliderSize;
     /*quitar la variable crounched en el caso de que se pueda mover mientras esta agachado
     private bool crounched = false;
     */
@@ -25,7 +26,11 @@ public class Movement : MonoBehaviour {
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
+		playerCollider = GetComponent<BoxCollider2D>();
+		if (playerCollider == null) {
+			Debug.LogError ("There is no boxCollider attached to the player!");
+		}
+		normalYColliderSize = playerCollider.size.y;
     }
 
 	// Use this for initialization
@@ -42,11 +47,11 @@ public class Movement : MonoBehaviour {
         float move = Input.GetAxis("Horizontal");
 
         // MOVERSE MIENTRAS TE AGACHAS (activar en crouch y uncrouch lineas de codigo que disminuyen la velocidad)
-        if(grounded0 && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
+        if((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
         {
             crouch();
         }
-        if (grounded0 && (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)))
+        if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)))
         {
             uncrouch();
         }
@@ -134,7 +139,7 @@ public class Movement : MonoBehaviour {
     void crouch()
     {
         //meter animacion de agacharse
-        boxCollider.GetComponent<BoxCollider2D>().enabled = false;
+		playerCollider.size = new Vector2(playerCollider.size.x,normalYColliderSize*0.5f);
         //linea que activa la velocidad reducida cuando el personaje se agacha
         Speed = Speed / 2;
 
@@ -144,7 +149,7 @@ public class Movement : MonoBehaviour {
     }
     void uncrouch()
     {
-        boxCollider.GetComponent <BoxCollider2D>().enabled = true;
+		playerCollider.size = new Vector2(playerCollider.size.x,normalYColliderSize);
         //linea que activa la velocidad normal cuando el personaje se levanta
         Speed = StandarSpeed;
 
