@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour {
     private float StandarSpeed;
     private Rigidbody2D rb;
 	private float normalYColliderSize;
+	private bool crounched = false;
     /*quitar la variable crounched en el caso de que se pueda mover mientras esta agachado
     private bool crounched = false;
     */
@@ -47,13 +48,15 @@ public class Movement : MonoBehaviour {
         float move = Input.GetAxis("Horizontal");
 
         // MOVERSE MIENTRAS TE AGACHAS (activar en crouch y uncrouch lineas de codigo que disminuyen la velocidad)
-        if((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
+		if(Input.GetAxis("Vertical")<0 && !crounched)
         {
             crouch();
+			crounched = true;
         }
-        if ((Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)))
+		if (Input.GetAxis("Vertical")>=0 && crounched)
         {
             uncrouch();
+			crounched = false;
         }
         rb.velocity = new Vector2(move * Speed, rb.velocity.y);
 
@@ -120,7 +123,7 @@ public class Movement : MonoBehaviour {
     void Update()
     {
         //en caso de pulsar espacio salta
-        if((grounded0 || grounded1 || grounded2) && Input.GetKeyDown("space"))
+		if((grounded0 || grounded1 || grounded2) && Input.GetButtonDown("Jump"))
         {
             //anim.setBool("Ground", false);
             rb.AddForce(new Vector2(0, jump));
